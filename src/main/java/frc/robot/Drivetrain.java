@@ -4,6 +4,7 @@
 
 package frc.robot;
  
+import java.io.ObjectInputStream.GetField;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -12,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.fasterxml.jackson.core.type.ResolvedType;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -33,7 +35,9 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -117,8 +121,7 @@ public class Drivetrain extends SubsystemBase {
 
     left1.setSelectedSensorPosition((int) (m_drivetrainSimulator.getLeftPositionMeters() / (2 * Math.PI * Units.inchesToMeters(3)) * (2048 * 8.45)));
     right1.setSelectedSensorPosition((int) (m_drivetrainSimulator.getRightPositionMeters() / (2 * Math.PI * Units.inchesToMeters(3)) * (2048 * 8.45)));
-    // left1Sim.setIntegratedSensorVelocity(leftVelocity.calculateWheelVelocity());
-    // right1Sim.setIntegratedSensorVelocity(rightVelocity.calculateWheelVelocity());
+ 
 
     m_gyroSim.setAngle(-m_drivetrainSimulator.getHeading().getDegrees());
 
@@ -192,7 +195,6 @@ public class Drivetrain extends SubsystemBase {
   // }
 
   public double getLeftEncoderMeters () {
-    // return (2 * Math.PI * Units.inchesToMeters(3) * ((left1.getSelectedSensorPosition() / 2048) / 8.45));
     return m_drivetrainSimulator.getLeftPositionMeters();
   }
 
@@ -203,7 +205,6 @@ public class Drivetrain extends SubsystemBase {
   // }
 
   public double getRightEncoderMeters () {
-    // return (2 * Math.PI * Units.inchesToMeters(3) * ((right1.getSelectedSensorPosition() / 2048) / 8.45));
     return m_drivetrainSimulator.getRightPositionMeters();
   }
 
@@ -229,7 +230,7 @@ public class Drivetrain extends SubsystemBase {
     PathPlannerServer.sendActivePath(AutoPath.getStates()); 
 
     this.resetOdometry(AutoPath.getInitialPose());
-  
+    
     return new PPRamseteCommand(
           AutoPath,
           getPose,
@@ -243,8 +244,6 @@ public class Drivetrain extends SubsystemBase {
           false,
           this
           ).raceWith(new RepeatCommand(new RunCommand(() -> updateState(AutoPath.getStates()))));
-
-
   }
 
  
