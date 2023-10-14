@@ -25,7 +25,7 @@ public class RobotContainer {
   private void configureBindings() {} 
 
   public Command getAutonomousCommand() {
-    return m_drivetrain.followTrajectoryCommand("Test");
+    return m_drivetrain.followTrajectoryCommand("The REAL 5 Cube");
 
   }
 }

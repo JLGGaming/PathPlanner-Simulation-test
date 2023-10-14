@@ -93,14 +93,14 @@ public class Drivetrain extends SubsystemBase {
       kDrivetrainPlant,
       DCMotor.getFalcon500(2),
       8.45,
-      Units.inchesToMeters(32),
+      0.79,
       6 / 2.0,
-        VecBuilder.fill(0, 0, 0, 0.1, 0.1, 0.005, 0.005));
+      VecBuilder.fill(0, 0, 0, 0.1, 0.1, 0.005, 0.005));
     
     
     m_field = new Field2d();
     
-    kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(23.5));
+    kinematics = new DifferentialDriveKinematics(0.79);
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()), getLeftEncoderMeters(), getRightEncoderMeters(), new Pose2d(0, 0, new Rotation2d()));
     leftVelocity = new WheelVelocityCalculator(left1);
     rightVelocity = new WheelVelocityCalculator(right1);
@@ -234,12 +234,12 @@ public class Drivetrain extends SubsystemBase {
     return new PPRamseteCommand(
           AutoPath,
           getPose,
-          new RamseteController(2, 0.7),
+          new RamseteController(),
           new SimpleMotorFeedforward(1, 1),
           kinematics,
           getCurrentSpeeds,
-          new PIDController(3, 0, 0.1),
-          new PIDController(3, 0, 0.1),
+          new PIDController(6, 0, 0.1),
+          new PIDController(6, 0, 0.1),
           driveVolts,
           false,
           this
